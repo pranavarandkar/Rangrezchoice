@@ -416,28 +416,28 @@
 <body>
   <!-- Header / Navbar -->
   <header class="navbar">
-    <a href="index.html" class="logo">Rangrez Matrimony</a>
+    <a href="https://pranavarandkar.github.io/Rangrezchoice/index.html" class="logo">Rangrez Matrimony</a>
     <span class="hamburger" onclick="toggleDrawer()">☰</span>
     <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="search.html">Search</a>
-      <a href="register/details.html" id="nav-register">Register</a>
-      <a href="login.html" id="nav-login">Login</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/index.html">Home</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/search.html">Search</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/registerlog.html" id="nav-register">Register</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/login.html" id="nav-login">Login</a>
       <a href="#success-stories">Success Stories</a>
       <a href="contact.html">Contact Us</a>
-      <a href="register/details.html" class="register-btn">Register Free</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html" class="register-btn">Register Free</a>
       <a href="dashboard.html" class="hidden" id="nav-dashboard">Dashboard</a>
-      <a href="#" class="hidden" id="nav-logout">Logout</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/login.html" class="hidden" id="nav-logout">Logout</a>
     </nav>
     <div class="nav-drawer" id="nav-drawer">
-      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/home.html" onclick="toggleDrawer()">Home</a>
-      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/search.html" onclick="toggleDrawer()">Search</a>
-      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/register.log/registerlog.html" id="drawer-register" onclick="toggleDrawer()">Register</a>
-      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/login.html" id="drawer-login" onclick="toggleDrawer()">Login</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/index.html" onclick="toggleDrawer()">Home</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/search.html" onclick="toggleDrawer()">Search</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/registerlog.html" id="drawer-register" onclick="toggleDrawer()">Register</a>
+      <a href="https://pranavarandkar.github.io/Rangrezchoice/login.html" id="drawer-login" onclick="toggleDrawer()">Login</a>
       <a href="#success-stories" onclick="toggleDrawer()">Success Stories</a>
       <a href="contact.html" onclick="toggleDrawer()">Contact Us</a>
       <a href="dashboard.html" class="hidden" id="drawer-dashboard" onclick="toggleDrawer()">Dashboard</a>
-       <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/details.html" class="register-btn" onclick="toggleDrawer()">Register Free</a>
+       <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html" class="register-btn" onclick="toggleDrawer()">Register Free</a>
       <a href="#" class="hidden" id="drawer-logout" onclick="toggleDrawer()">Logout</a>
     </div>
     <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
@@ -446,7 +446,7 @@
   <!-- Hero Section -->
   <section class="hero">
     <h1>Find Your Perfect Match within the Rangrez Community</h1>
-    <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/details.html" class="cta-btn">Start Now</a>
+    <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html" class="cta-btn">Start Now</a>
   </section>
 
   <!-- Quick Search Box -->
@@ -463,7 +463,7 @@
     </div>
     <input type="text" id="search-location" placeholder="City, State" aria-label="Location">
     <input type="text" value="Rangrez" disabled aria-label="Community">
-    <button onclick="window.location.href='search.html'" aria-label="Search">Search</button>
+    <button onclick="window.location.href='https://pranavarandkar.github.io/Rangrezchoice/search.html'" aria-label="Search">Search</button>
   </section>
 
   <!-- Featured Profiles Section -->
@@ -574,7 +574,7 @@
       e.preventDefault();
       try {
         await signOut(auth);
-        window.location.href = "file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/login.html";
+        window.location.href = "https://pranavarandkar.github.io/Rangrezchoice/login.html";
       } catch (error) {
         console.error("Logout failed:", error.message);
         alert("Failed to log out. Please try again.");
@@ -606,7 +606,7 @@
           const querySnapshot = await getDocs(q);
           profilesGrid.innerHTML = "";
           if (querySnapshot.empty) {
-            profilesGrid.innerHTML = '<p class="empty">New profiles coming soon! <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/details.html">Join now</a> to be featured.</p>';
+            profilesGrid.innerHTML = '<p class="empty">New profiles coming soon! <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html">Join now</a> to be featured.</p>';
             return;
           }
           querySnapshot.forEach((doc) => {
@@ -620,7 +620,7 @@
                 <h3>${data.name}, ${data.age}</h3>
                 <p>${data.location}</p>
                 <p>${data.tagline || "Looking for a life partner"}</p>
-                <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/profile.html?id=${doc.id}" aria-label="View ${data.name}'s Profile">View Profile</a>
+                <a href="https://pranavarandkar.github.io/Rangrezchoice/profile.html?id=${doc.id}" aria-label="View ${data.name}'s Profile">View Profile</a>
               </div>
             `;
           });
@@ -746,3 +746,4 @@
   </script>
 </body>
 </html>
+

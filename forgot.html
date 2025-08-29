@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rangrez Matrimony - Forgot Password</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #FAF3E0;
+      color: #333333;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      flex: 1;
+      padding: 4vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+      padding: 5vw;
+    }
+    h2 {
+      text-align: center;
+      color: #800000;
+      font-size: 1.5rem;
+      margin-bottom: 4vw;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3vw;
+      margin-bottom: 4vw;
+    }
+    label {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 1.5vw;
+    }
+    input {
+      width: 100%;
+      padding: 3vw;
+      border: 1px solid #ccc;
+      border-radius: 0.3rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 1.5vw;
+      text-align: center;
+    }
+    .success {
+      color: green;
+      font-size: 0.9rem;
+      margin-top: 1.5vw;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 3vw;
+      min-height: 50px;
+      border: none;
+      border-radius: 0.3rem;
+      background: linear-gradient(to right, #800000, #FFD700);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 3vw;
+    }
+    button:hover, button:active {
+      background: linear-gradient(to right, #FFD700, #800000);
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .links {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .links a {
+      color: #800000;
+      text-decoration: none;
+      margin: 0 2vw;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 5vw;
+      }
+      .card {
+        padding: 6vw;
+        border-radius: 0.5rem;
+      }
+      h2 {
+        font-size: 1.2rem;
+        margin-bottom: 5vw;
+      }
+      label {
+        font-size: 0.9rem;
+        margin-bottom: 2vw;
+      }
+      input {
+        padding: 4vw;
+        font-size: 0.9rem;
+      }
+      button {
+        padding: 4vw;
+        min-height: 45px;
+        font-size: 0.9rem;
+      }
+      .error, .success {
+        font-size: 0.8rem;
+        margin-top: 2vw;
+      }
+      .links a {
+        font-size: 0.8rem;
+      }
+    }
+    @media (min-width: 601px) {
+      .container {
+        padding: 2vw;
+      }
+      .card {
+        padding: 3vw;
+      }
+      h2 {
+        font-size: 1.8rem;
+      }
+      label {
+        font-size: 1.1rem;
+      }
+      input {
+        padding: 2vw;
+        font-size: 1.1rem;
+      }
+      button {
+        padding: 2vw;
+        min-height: 50px;
+        font-size: 1.1rem;
+      }
+      .error, .success {
+        font-size: 1rem;
+      }
+      .links a {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Reset Your Password</h2>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+        <button id="reset-btn">Send Reset Link</button>
+        <span class="error" id="error"></span>
+        <span class="success" id="success"></span>
+      </div>
+      <div class="links">
+        <a href="login.html">Back to Login</a>
+        <a href="register.html">Register Free</a>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCG8OStEG_Si3ypR0fvRqRDSxkO9qz1fCI",
+      authDomain: "rangrezchoice.firebaseapp.com",
+      projectId: "rangrezchoice",
+      storageBucket: "rangrezchoice.firebasestorage.app",
+      messagingSenderId: "586465511498",
+      appId: "1:586465511498:web:cbf91f0fc7b99859fcfeb3",
+      measurementId: "G-F19WWYW4NS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // DOM elements
+    const emailInput = document.getElementById("email");
+    const resetBtn = document.getElementById("reset-btn");
+    const errorDisplay = document.getElementById("error");
+    const successDisplay = document.getElementById("success");
+
+    // Validate email format
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Send Password Reset Email
+    resetBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      errorDisplay.textContent = "";
+      successDisplay.textContent = "";
+      resetBtn.disabled = true;
+      resetBtn.textContent = "Sending...";
+
+      if (!email) {
+        errorDisplay.textContent = "Please enter your email address.";
+        resetBtn.disabled = false;
+        resetBtn.textContent = "Send Reset Link";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        errorDisplay.textContent = "Please enter a valid email address.";
+        resetBtn.disabled = false;
+        resetBtn.textContent = "Send Reset Link";
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        successDisplay.textContent = "Password reset email sent. Check your inbox.";
+        emailInput.value = "";
+      } catch (error) {
+        errorDisplay.textContent =
+          error.code === "auth/user-not-found"
+            ? "No account found with this email."
+            : error.code === "auth/operation-not-allowed"
+            ? "Password reset is not enabled. Contact support."
+            : "Error sending reset email. Please try again.";
+        console.error(error);
+      } finally {
+        resetBtn.disabled = false;
+        resetBtn.textContent = "Send Reset Link";
+      }
+    });
+  </script>
+</body>
+</html>

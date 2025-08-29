@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rangrez Matrimony - Profile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #333;
+      background: #FAF3E0;
+      line-height: 1.5;
+    }
+    .navbar {
+      background: #800000;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #FFD700;
+      text-decoration: none;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: #FFF;
+      cursor: pointer;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #FFF;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #FFD700;
+    }
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 250px;
+      height: 100%;
+      background: #800000;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: right 0.3s ease;
+      z-index: 1001;
+    }
+    .nav-drawer.open {
+      right: 0;
+    }
+    .nav-drawer a {
+      color: #FFF;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+    .nav-drawer a:hover {
+      color: #FFD700;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 1000;
+    }
+    .overlay.active {
+      display: block;
+    }
+    .main-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .profile-top {
+      background: #FFF;
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.15);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .profile-top img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 2px solid #800000;
+    }
+    .profile-top h2 {
+      font-size: 1.5rem;
+      color: #800000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .profile-top h2 .verified {
+      color: #FFD700;
+      font-size: 1.2rem;
+    }
+    .profile-top p {
+      font-size: 0.9rem;
+      color: #555;
+      margin: 0.3rem 0;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .action-buttons a {
+      background: #FFD700;
+      color: #800000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.4rem;
+      text-decoration: none;
+      font-weight: bold;
+      min-height: 44px;
+      line-height: 1;
+      text-align: center;
+    }
+    .action-buttons a:hover {
+      background: #800000;
+      color: #FFF;
+    }
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      justify-content: center;
+    }
+    .tabs button {
+      background: #ddd;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    .tabs button.active {
+      background: #800000;
+      color: #FFF;
+    }
+    .tabs button:hover {
+      background: #FFD700;
+      color: #800000;
+    }
+    .tab-content {
+      background: #FFF;
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.15);
+      min-height: 200px;
+    }
+    .tab-content h3 {
+      color: #800000;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+    .tab-content p {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #800000;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+    .error {
+      font-size: 0.9rem;
+      color: #800000;
+      text-align: center;
+      padding: 1rem;
+    }
+    .error a {
+      color: #FFD700;
+      text-decoration: none;
+    }
+    .error a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      background: #800000;
+      color: #FFF;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    .footer a {
+      color: #FFD700;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-size: 0.9rem;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .footer p {
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+    }
+    .hidden {
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .profile-top img {
+        width: 120px;
+        height: 120px;
+      }
+      .tabs {
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .tabs button {
+        width: 100%;
+      }
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .action-buttons a {
+        width: 100%;
+      }
+    }
+    @media (min-width: 601px) {
+      .nav-drawer {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <a href="index.html" class="logo">Rangrez Matrimony</a>
+    <span class="hamburger" onclick="toggleDrawer()">☰</span>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" class="hidden" id="nav-dashboard">Dashboard</a>
+      <a href="#" class="hidden" id="nav-logout">Logout</a>
+    </nav>
+    <div class="nav-drawer" id="nav-drawer">
+      <a href="index.html" onclick="toggleDrawer()">Home</a>
+      <a href="dashboard.html" class="hidden" id="drawer-dashboard" onclick="toggleDrawer()">Dashboard</a>
+      <a href="#" class="hidden" id="drawer-logout" onclick="toggleDrawer()">Logout</a>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <section class="profile-top" id="profile-top">
+      <div class="loading"><div class="spinner"></div></div>
+    </section>
+    <div class="tabs">
+      <button class="active" onclick="showTab('about')">About</button>
+      <button onclick="showTab('family')">Family</button>
+      <button onclick="showTab('education')">Education/Job</button>
+      <button onclick="showTab('preferences')">Preferences</button>
+    </div>
+    <section class="tab-content" id="tab-content">
+      <div class="loading"><div class="spinner"></div></div>
+    </section>
+    <div id="contact-button-container" class="hidden"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="faq.html">Help/FAQ</a>
+    </div>
+    <p>© 2025 Rangrez Matrimony. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCG8OStEG_Si3ypR0fvRqRDSxkO9qz1fCI",
+      authDomain: "rangrezchoice.firebaseapp.com",
+      projectId: "rangrezchoice",
+      storageBucket: "rangrezchoice.firebasestorage.app",
+      messagingSenderId: "586465511498",
+      appId: "1:586465511498:web:cbf91f0fc7b99859fcfeb3",
+      measurementId: "G-F19WWYW4NS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Toggle drawer
+    window.toggleDrawer = function () {
+      const drawer = document.getElementById("nav-drawer");
+      const overlay = document.getElementById("overlay");
+      drawer.classList.toggle("open");
+      overlay.classList.toggle("active");
+    };
+
+    // Update navbar and buttons based on auth state
+    onAuthStateChanged(auth, (user) => {
+      const dashboardLink = document.getElementById("nav-dashboard");
+      const logoutLink = document.getElementById("nav-logout");
+      const drawerDashboard = document.getElementById("drawer-dashboard");
+      const drawerLogout = document.getElementById("drawer-logout");
+      const contactButtonContainer = document.getElementById("contact-button-container");
+      if (user) {
+        dashboardLink.classList.remove("hidden");
+        logoutLink.classList.remove("hidden");
+        drawerDashboard.classList.remove("hidden");
+        drawerLogout.classList.remove("hidden");
+        contactButtonContainer.classList.remove("hidden");
+        contactButtonContainer.innerHTML = `
+          <div class="action-buttons">
+            <a href="#" class="contact-button" onclick="expressInterest()">Express Interest</a>
+            <a href="#" class="contact-button" onclick="contactNow()">Contact Now</a>
+          </div>
+        `;
+      } else {
+        dashboardLink.classList.add("hidden");
+        logoutLink.classList.add("hidden");
+        drawerDashboard.classList.add("hidden");
+        drawerLogout.classList.add("hidden");
+        contactButtonContainer.classList.add("hidden");
+        contactButtonContainer.innerHTML = '<p class="error">Please <a href="login.html">log in</a> to express interest or contact.</p>';
+      }
+    });
+
+    // Logout
+    async function handleLogout(e) {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout failed:", error.message);
+        alert("Failed to log out. Please try again.");
+      }
+    }
+    document.getElementById("nav-logout").addEventListener("click", handleLogout);
+    document.getElementById("drawer-logout").addEventListener("click", handleLogout);
+
+    // Express Interest (Placeholder)
+    window.expressInterest = function () {
+      alert("Interest expressed! This feature is under development.");
+      // TODO: Implement logic to save interest request to Firestore
+    };
+
+    // Contact Now (Placeholder)
+    window.contactNow = function () {
+      alert("Contact feature is under development.");
+      // TODO: Implement logic to initiate contact (e.g., chat or email)
+    };
+
+    // Calculate age from DOB
+    function calculateAge(dob) {
+      if (!dob) return null;
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    // Retry logic for Firestore queries
+    async function withRetry(fn, maxAttempts = 3, delay = 1000) {
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          return await fn();
+        } catch (error) {
+          if (attempt === maxAttempts) throw error;
+          console.warn(`Attempt ${attempt} failed: ${error.message}. Retrying...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+
+    // Load profile data
+    async function loadProfile() {
+      const profileTop = document.getElementById("profile-top");
+      const tabContent = document.getElementById("tab-content");
+      const urlParams = new URLSearchParams(window.location.search);
+      const profileId = urlParams.get("id");
+
+      if (!profileId) {
+        profileTop.innerHTML = '<p class="error">Invalid profile ID. Please return to <a href="index.html">home</a>.</p>';
+        tabContent.innerHTML = '';
+        return;
+      }
+
+      try {
+        await withRetry(async () => {
+          const docRef = doc(db, "users", profileId);
+          const docSnap = await getDoc(docRef);
+
+          if (!docSnap.exists()) {
+            profileTop.innerHTML = '<p class="error">Profile not found. Please return to <a href="index.html">home</a>.</p>';
+            tabContent.innerHTML = '';
+            return;
+          }
+
+          const data = docSnap.data();
+          window.currentProfileData = data;
+
+          // Populate top section
+          const photoUrl = data.photoUrl && data.photoUrl.startsWith("https://i.ibb.co") 
+            ? data.photoUrl 
+            : "https://via.placeholder.com/150?text=Profile";
+          const age = data.dob ? calculateAge(data.dob) : data.age || "Not specified";
+          profileTop.innerHTML = `
+            <img src="${photoUrl}" alt="${data.name}'s Profile">
+            <h2>${data.name || "Not specified"}, ${age} ${data.verified ? '<span class="verified">✅</span>' : ''}</h2>
+            <p>Gender: ${data.gender || "Not specified"}</p>
+            <p>Location: ${data.location || "Not specified"}</p>
+            <p>Occupation: ${data.occupation || "Not specified"}</p>
+          `;
+
+          // Show default tab (About)
+          showTab('about');
+        });
+      } catch (error) {
+        console.error("Error loading profile:", error.message);
+        profileTop.innerHTML = '<p class="error">Unable to load profile. Please try again later or <a href="contact.html">contact support</a>.</p>';
+        tabContent.innerHTML = '';
+      }
+    }
+
+    // Show tab content
+    window.showTab = function (tabId) {
+      const tabs = document.querySelectorAll(".tabs button");
+      const tabContent = document.getElementById("tab-content");
+      const profileData = window.currentProfileData || {};
+
+      tabs.forEach(tab => tab.classList.remove("active"));
+      document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add("active");
+
+      switch (tabId) {
+        case "about":
+          tabContent.innerHTML = `
+            <h3>About</h3>
+            <p>Marital Status: ${profileData.maritalStatus || "Not specified"}</p>
+            <p>Mother Tongue: ${profileData.motherTongue || "Not specified"}</p>
+            <p>Subcaste: ${profileData.subcaste || "Not specified"}</p>
+          `;
+          break;
+        case "family":
+          tabContent.innerHTML = `
+            <h3>Family</h3>
+            <p>Father: ${profileData.family?.father || "Not specified"}</p>
+            <p>Mother: ${profileData.family?.mother || "Not specified"}</p>
+            <p>Siblings: ${profileData.family?.siblings || "Not specified"}</p>
+          `;
+          break;
+        case "education":
+          tabContent.innerHTML = `
+            <h3>Education & Job</h3>
+            <p>Qualification: ${profileData.qualification || "Not specified"}</p>
+            <p>Occupation: ${profileData.occupation || "Not specified"}</p>
+            <p>Income: ${profileData.income || "Not specified"}</p>
+          `;
+          break;
+        case "preferences":
+          tabContent.innerHTML = `
+            <h3>Preferences</h3>
+            <p>Age Range: ${profileData.preferences?.age_range || "Not specified"}</p>
+            <p>Education: ${profileData.preferences?.education || "Not specified"}</p>
+            <p>Job: ${profileData.preferences?.job || "Not specified"}</p>
+            <p>Location: ${profileData.preferences?.location || "Not specified"}</p>
+          `;
+          break;
+      }
+    };
+
+    // Initialize
+    loadProfile();
+  </script>
+</body>
+</html>

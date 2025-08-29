@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rangrez Matrimony - Search Profiles</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #333;
+      background: #FAF3E0;
+      line-height: 1.5;
+    }
+    .navbar {
+      background: #800000;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #FFD700;
+      text-decoration: none;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: #FFF;
+      cursor: pointer;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #FFF;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #FFD700;
+    }
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 250px;
+      height: 100%;
+      background: #800000;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: right 0.3s ease;
+      z-index: 1001;
+    }
+    .nav-drawer.open {
+      right: 0;
+    }
+    .nav-drawer a {
+      color: #FFF;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+    .nav-drawer a:hover {
+      color: #FFD700;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 1000;
+    }
+    .overlay.active {
+      display: block;
+    }
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .filter-section {
+      background: #FFF;
+      padding: 1rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.15);
+      margin-bottom: 1.5rem;
+    }
+    .filter-section h2 {
+      color: #800000;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .filter-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .filter-section select,
+    .filter-section input {
+      padding: 0.6rem;
+      border: 2px solid #ddd;
+      border-radius: 0.4rem;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+    .filter-section input[type="number"] {
+      width: 70px;
+    }
+    .filter-section .age-range {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .filter-section button {
+      background: #800000;
+      color: #FFF;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 0.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .filter-section button:hover {
+      background: #FFD700;
+      color: #800000;
+    }
+    .view-toggle {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .view-toggle button {
+      background: #ddd;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .view-toggle button.active {
+      background: #800000;
+      color: #FFF;
+    }
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      max-width: 100%;
+    }
+    .profiles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .profile-card {
+      background: #FFF;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    .profile-card.list {
+      flex-direction: row;
+      text-align: left;
+    }
+    .profile-card img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .profile-card.list img {
+      width: 80px;
+      height: 80px;
+    }
+    .profile-card h3 {
+      font-size: 1rem;
+      color: #800000;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex: 1;
+    }
+    .profile-card h3 a {
+      text-decoration: none;
+      color: #800000;
+      flex: 1;
+    }
+    .profile-card h3 a:hover {
+      color: #FFD700;
+    }
+    .profile-card h3 .verified {
+      color: #FFD700;
+      font-size: 0.9rem;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #800000;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+    .error, .empty {
+      font-size: 0.9rem;
+      color: #800000;
+      text-align: center;
+      padding: 1rem;
+    }
+    .empty a, .error a {
+      color: #FFD700;
+      text-decoration: none;
+    }
+    .empty a:hover, .error a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      background: #800000;
+      color: #FFF;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    .footer a {
+      color: #FFD700;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-size: 0.9rem;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .footer p {
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+    }
+    .hidden {
+      display: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .filter-section {
+        margin: 0 0.5rem 1rem;
+      }
+      .profile-card.list {
+        flex-direction: column;
+        text-align: center;
+      }
+      .profile-card.list img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+    @media (min-width: 601px) {
+      .nav-drawer {
+        display: none;
+      }
+      .main-content {
+        flex-direction: row;
+        gap: 1.5rem;
+      }
+      .filter-section {
+        width: 250px;
+        min-width: 200px;
+        position: sticky;
+        top: 4.5rem;
+      }
+      .profiles-section {
+        flex: 1;
+      }
+      .profiles-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <a href="index.html" class="logo">Rangrez Matrimony</a>
+    <span class="hamburger" onclick="toggleDrawer()">☰</span>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" class="hidden" id="nav-dashboard">Dashboard</a>
+      <a href="#" class="hidden" id="nav-logout">Logout</a>
+    </nav>
+    <div class="nav-drawer" id="nav-drawer">
+      <a href="index.html" onclick="toggleDrawer()">Home</a>
+      <a href="dashboard.html" class="hidden" id="drawer-dashboard" onclick="toggleDrawer()">Dashboard</a>
+      <a href="#" class="hidden" id="drawer-logout" onclick="toggleDrawer()">Logout</a>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Filter Section -->
+    <section class="filter-section">
+      <h2>Filter Profiles</h2>
+      <form id="search-form">
+        <select id="filter-gender" aria-label="Gender">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <div class="age-range">
+          <input type="number" id="filter-age-min" min="18" max="50" value="18" aria-label="Minimum Age">
+          <span>-</span>
+          <input type="number" id="filter-age-max" min="18" max="50" value="50" aria-label="Maximum Age">
+        </div>
+        <input type="text" id="filter-location" placeholder="City, State" aria-label="Location">
+        <select id="filter-education" aria-label="Education">
+          <option value="">Select Education</option>
+          <option value="High School">High School</option>
+          <option value="Bachelor's">Bachelor's</option>
+          <option value="Master's">Master's</option>
+          <option value="PhD">PhD</option>
+          <option value="MBA">MBA</option>
+        </select>
+        <select id="filter-subcaste" aria-label="Subcaste">
+          <option value="">Select Subcaste</option>
+          <option value="Sunni">Sunni</option>
+          <option value="Rangrez Subgroup B">Rangrez Subgroup B</option>
+        </select>
+        <select id="filter-marital-status" aria-label="Marital Status">
+          <option value="">Select Marital Status</option>
+          <option value="Single">Single</option>
+          <option value="Divorced">Divorced</option>
+          <option value="Widowed">Widowed</option>
+        </select>
+        <button type="submit" aria-label="Apply Filters">Apply Filters</button>
+      </form>
+    </section>
+
+    <!-- Profiles Section -->
+    <section class="profiles-section">
+      <div class="view-toggle">
+        <button id="grid-view" class="active">Grid View</button>
+        <button id="list-view">List View</button>
+      </div>
+      <div class="profiles-grid" id="profiles-container">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="faq.html">Help/FAQ</a>
+    </div>
+    <p>© 2025 Rangrez Matrimony. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCG8OStEG_Si3ypR0fvRqRDSxkO9qz1fCI",
+      authDomain: "rangrezchoice.firebaseapp.com",
+      projectId: "rangrezchoice",
+      storageBucket: "rangrezchoice.firebasestorage.app",
+      messagingSenderId: "586465511498",
+      appId: "1:586465511498:web:cbf91f0fc7b99859fcfeb3",
+      measurementId: "G-F19WWYW4NS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Toggle drawer
+    window.toggleDrawer = function () {
+      const drawer = document.getElementById("nav-drawer");
+      const overlay = document.getElementById("overlay");
+      drawer.classList.toggle("open");
+      overlay.classList.toggle("active");
+    };
+
+    // Update navbar based on auth state
+    onAuthStateChanged(auth, (user) => {
+      const dashboardLink = document.getElementById("nav-dashboard");
+      const logoutLink = document.getElementById("nav-logout");
+      const drawerDashboard = document.getElementById("drawer-dashboard");
+      const drawerLogout = document.getElementById("drawer-logout");
+      if (user) {
+        dashboardLink.classList.remove("hidden");
+        logoutLink.classList.remove("hidden");
+        drawerDashboard.classList.remove("hidden");
+        drawerLogout.classList.remove("hidden");
+      } else {
+        dashboardLink.classList.add("hidden");
+        logoutLink.classList.add("hidden");
+        drawerDashboard.classList.add("hidden");
+        drawerLogout.classList.add("hidden");
+      }
+    });
+
+    // Logout
+    async function handleLogout(e) {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout failed:", error.message);
+        alert("Failed to log out. Please try again.");
+      }
+    }
+    document.getElementById("nav-logout").addEventListener("click", handleLogout);
+    document.getElementById("drawer-logout").addEventListener("click", handleLogout);
+
+    // Retry logic for Firestore queries
+    async function withRetry(fn, maxAttempts = 3, delay = 1000) {
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          return await fn();
+        } catch (error) {
+          if (attempt === maxAttempts) throw error;
+          console.warn(`Attempt ${attempt} failed: ${error.message}. Retrying...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+
+    // Calculate age from DOB
+    function calculateAge(dob) {
+      if (!dob) return null;
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    // Parse age range preference
+    function parseAgeRange(ageRange) {
+      if (!ageRange || typeof ageRange !== 'string') return { min: 18, max: 50 };
+      const [min, max] = ageRange.split('-').map(Number);
+      return { min: min || 18, max: max || 50 };
+    }
+
+    // Fetch profiles with client-side filtering
+    async function loadProfiles(filters = {}) {
+      const profilesContainer = document.getElementById("profiles-container");
+      profilesContainer.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      try {
+        await withRetry(async () => {
+          // Simple query to avoid index requirements
+          let q = query(collection(db, "users"), where("subcaste", "==", "Sunni"));
+          const querySnapshot = await getDocs(q);
+          profilesContainer.innerHTML = "";
+          if (querySnapshot.empty) {
+            profilesContainer.innerHTML = '<p class="empty">No profiles found. <a href="register/details.html">Join now</a> to create your profile.</p>';
+            return;
+          }
+
+          const profiles = [];
+          const currentUserAge = 20; // Replace with actual user age from auth
+          const currentUserEducation = "Postgraduate"; // Replace with actual user education
+
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const age = data.dob ? calculateAge(data.dob) : data.age || 0;
+            const preferences = data.preferences || {};
+            const prefAgeRange = parseAgeRange(preferences.age_range);
+            const prefEducation = preferences.education || '';
+
+            // Apply client-side filters
+            if (filters.gender && data.gender !== filters.gender) return;
+            if (filters.location && data.location !== filters.location) return;
+            if (filters.education && data.qualification !== filters.education) return;
+            if (filters.maritalStatus && data.maritalStatus !== filters.maritalStatus) return;
+            if (filters.ageMin && age < parseInt(filters.ageMin)) return;
+            if (filters.ageMax && age > parseInt(filters.ageMax)) return;
+
+            // Match based on preferences
+            if (
+              (!prefAgeRange.min || currentUserAge >= prefAgeRange.min) &&
+              (!prefAgeRange.max || currentUserAge <= prefAgeRange.max) &&
+              (!prefEducation || prefEducation === currentUserEducation)
+            ) {
+              profiles.push({ id: doc.id, data });
+            }
+          });
+
+          if (profiles.length === 0) {
+            profilesContainer.innerHTML = '<p class="empty">No profiles found. <a href="register/details.html">Join now</a> to create your profile.</p>';
+            return;
+          }
+
+          profiles.forEach(({ id, data }) => {
+            const photoUrl = data.photoUrl && data.photoUrl.startsWith("https://i.ibb.co")
+              ? data.photoUrl
+              : "https://via.placeholder.com/60?text=Profile";
+            profilesContainer.innerHTML += `
+              <div class="profile-card ${profilesContainer.classList.contains('profiles-list') ? 'list' : ''}" data-id="${id}">
+                <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/home/search/profile/profile.html?id=${id}">
+                  <img src="https://via.placeholder.com/60?text=Loading" data-src="${photoUrl}" alt="${data.name}'s Profile" class="lazy">
+                </a>
+                <h3><a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/home/search/profile/profile.html?id=${id}">${data.name}</a> ${data.verified ? '<span class="verified">✔️</span>' : ''}</h3>
+              </div>
+            `;
+          });
+
+          // Add click event listeners to profile cards
+          document.querySelectorAll('.profile-card').forEach(card => {
+            card.addEventListener('click', () => {
+              const userId = card.getAttribute('data-id');
+              window.location.href = `profile.html?id=${userId}`;
+            });
+          });
+
+          lazyLoadImages();
+        });
+      } catch (error) {
+        console.error("Error loading profiles:", error.message);
+        profilesContainer.innerHTML = '<p class="error">Unable to load profiles. Please try again or <a href="contact.html">contact support</a>.</p>';
+      }
+    }
+
+    // Lazy load images
+    function lazyLoadImages() {
+      const images = document.querySelectorAll("img.lazy");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove("lazy");
+            observer.unobserve(img);
+          }
+        });
+      });
+      images.forEach(img => observer.observe(img));
+    }
+
+    // View toggle
+    document.getElementById("grid-view").addEventListener("click", () => {
+      document.getElementById("profiles-container").classList.remove("profiles-list");
+      document.getElementById("profiles-container").classList.add("profiles-grid");
+      document.getElementById("grid-view").classList.add("active");
+      document.getElementById("list-view").classList.remove("active");
+      document.querySelectorAll(".profile-card").forEach(card => card.classList.remove("list"));
+      loadProfiles(getCurrentFilters());
+    });
+    document.getElementById("list-view").addEventListener("click", () => {
+      document.getElementById("profiles-container").classList.remove("profiles-grid");
+      document.getElementById("profiles-container").classList.add("profiles-list");
+      document.getElementById("grid-view").classList.remove("active");
+      document.getElementById("list-view").classList.add("active");
+      document.querySelectorAll(".profile-card").forEach(card => card.classList.add("list"));
+      loadProfiles(getCurrentFilters());
+    });
+
+    // Handle filter form submission
+    document.getElementById("search-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const filters = getCurrentFilters();
+      loadProfiles(filters);
+    });
+
+    // Get current filter values
+    function getCurrentFilters() {
+      return {
+        gender: document.getElementById("filter-gender").value,
+        ageMin: document.getElementById("filter-age-min").value,
+        ageMax: document.getElementById("filter-age-max").value,
+        location: document.getElementById("filter-location").value.trim(),
+        education: document.getElementById("filter-education").value,
+        subcaste: document.getElementById("filter-subcaste").value,
+        maritalStatus: document.getElementById("filter-marital-status").value
+      };
+    }
+
+    // Initialize
+    loadProfiles();
+  </script>
+</body>
+</html>

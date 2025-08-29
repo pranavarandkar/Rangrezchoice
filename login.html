@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rangrez Matrimony - Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #FAF3E0;
+      color: #333333;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      flex: 1;
+      padding: 4vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+      padding: 5vw;
+    }
+    h2 {
+      text-align: center;
+      color: #800000;
+      font-size: 1.5rem;
+      margin-bottom: 4vw;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3vw;
+      margin-bottom: 4vw;
+    }
+    label {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 1.5vw;
+    }
+    input {
+      width: 100%;
+      padding: 3vw;
+      border: 1px solid #ccc;
+      border-radius: 0.3rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .password-container {
+      position: relative;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 3vw;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #800000;
+    }
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 1.5vw;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 3vw;
+      min-height: 50px;
+      border: none;
+      border-radius: 0.3rem;
+      background: linear-gradient(to right, #800000, #FFD700);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 3vw;
+    }
+    button:hover, button:active {
+      background: linear-gradient(to right, #FFD700, #800000);
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .links {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .links a {
+      color: #800000;
+      text-decoration: none;
+      margin: 0 2vw;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 5vw;
+      }
+      .card {
+        padding: 6vw;
+        border-radius: 0.5rem;
+      }
+      h2 {
+        font-size: 1.2rem;
+        margin-bottom: 5vw;
+      }
+      label {
+        font-size: 0.9rem;
+        margin-bottom: 2vw;
+      }
+      input {
+        padding: 4vw;
+        font-size: 0.9rem;
+      }
+      button {
+        padding: 4vw;
+        min-height: 45px;
+        font-size: 0.9rem;
+      }
+      .error {
+        font-size: 0.8rem;
+        margin-top: 2vw;
+      }
+      .links a {
+        font-size: 0.8rem;
+      }
+      .password-toggle {
+        font-size: 0.8rem;
+        right: 4vw;
+      }
+    }
+    @media (min-width: 601px) {
+      .container {
+        padding: 2vw;
+      }
+      .card {
+        padding: 3vw;
+      }
+      h2 {
+        font-size: 1.8rem;
+      }
+      label {
+        font-size: 1.1rem;
+      }
+      input {
+        padding: 2vw;
+        font-size: 1.1rem;
+      }
+      button {
+        padding: 2vw;
+        min-height: 50px;
+        font-size: 1.1rem;
+      }
+      .error {
+        font-size: 1rem;
+      }
+      .links a {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Login to Rangrez Matrimony</h2>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+        <label for="password" class="password-label">Password</label>
+        <div class="password-container">
+          <input type="password" id="password" required>
+          <span class="password-toggle" id="toggle-password">Show</span>
+        </div>
+        <button id="login-btn">Login</button>
+        <span class="error" id="error"></span>
+      </div>
+      <div class="links">
+        <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/register/forgot/forgot.html" id="forgot-password">Forgot Password?</a>
+        <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/registerlog.html">Register Free</a>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCG8OStEG_Si3ypR0fvRqRDSxkO9qz1fCI",
+      authDomain: "rangrezchoice.firebaseapp.com",
+      projectId: "rangrezchoice",
+      storageBucket: "rangrezchoice.firebasestorage.app",
+      messagingSenderId: "586465511498",
+      appId: "1:586465511498:web:cbf91f0fc7b99859fcfeb3",
+      measurementId: "G-F19WWYW4NS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // DOM elements
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("login-btn");
+    const togglePasswordBtn = document.getElementById("toggle-password");
+    const forgotPasswordLink = document.getElementById("forgot-password");
+    const errorDisplay = document.getElementById("error");
+
+    // Password toggle
+    function togglePassword() {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePasswordBtn.textContent = "Hide";
+      } else {
+        passwordInput.type = "password";
+        togglePasswordBtn.textContent = "Show";
+      }
+    }
+
+    // Attach event listener for password toggle
+    togglePasswordBtn.addEventListener("click", togglePassword);
+
+    // Validate email format
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Email/Password Login
+    loginBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      errorDisplay.textContent = "";
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Logging in...";
+
+      if (!email || !password) {
+        errorDisplay.textContent = "Please fill all fields.";
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        errorDisplay.textContent = "Please enter a valid email address.";
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "details.html";
+      } catch (error) {
+        errorDisplay.textContent =
+          error.code === "auth/wrong-password"
+            ? "Incorrect password."
+            : error.code === "auth/user-not-found"
+            ? "No account found with this email."
+            : error.code === "auth/operation-not-allowed"
+            ? "Email/Password sign-in is not enabled. Contact support."
+            : "Login failed. Please check your credentials.";
+        console.error(error);
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+      }
+    });
+
+    // Forgot Password
+    forgotPasswordLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      errorDisplay.textContent = "";
+      forgotPasswordLink.disabled = true;
+
+      if (!email) {
+        errorDisplay.textContent = "Please enter your email address.";
+        forgotPasswordLink.disabled = false;
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        errorDisplay.textContent = "Please enter a valid email address.";
+        forgotPasswordLink.disabled = false;
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        errorDisplay.textContent = "Password reset email sent. Check your inbox.";
+      } catch (error) {
+        errorDisplay.textContent =
+          error.code === "auth/user-not-found"
+            ? "No account found with this email."
+            : error.code === "auth/operation-not-allowed"
+            ? "Password reset is not enabled. Contact support."
+            : "Error sending reset email. Please try again.";
+        console.error(error);
+      } finally {
+        forgotPasswordLink.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

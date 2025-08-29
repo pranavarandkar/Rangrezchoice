@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rangrez Matrimony - Find Your Perfect Match</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #333;
+      background: #FAF3E0;
+      line-height: 1.5;
+    }
+    .navbar {
+      background: #800000;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #FFD700;
+      text-decoration: none;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: #FFF;
+      cursor: pointer;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #FFF;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #FFD700;
+    }
+    .register-btn {
+      background: #FFD700;
+      color: #800000;
+      padding: 0.5rem 1rem;
+      border-radius: 0.4rem;
+      font-weight: bold;
+      text-decoration: none;
+      min-width: 44px;
+      text-align: center;
+    }
+    .register-btn:hover {
+      background: #FFF;
+    }
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 250px;
+      height: 100%;
+      background: #800000;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: right 0.3s ease;
+      z-index: 1001;
+    }
+    .nav-drawer.open {
+      right: 0;
+    }
+    .nav-drawer a {
+      color: #FFF;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+    .nav-drawer a:hover {
+      color: #FFD700;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 1000;
+    }
+    .overlay.active {
+      display: block;
+    }
+    .hero {
+      background: url('https://images.unsplash.com/photo-1519748771451-a94c186835b7?fit=crop&w=800&q=80') no-repeat center/cover;
+      height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #FFF;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1s ease;
+    }
+    .hero h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .hero .cta-btn {
+      background: #FFD700;
+      color: #800000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.4rem;
+      text-decoration: none;
+      font-weight: bold;
+      min-width: 44px;
+      transition: transform 0.2s;
+    }
+    .hero .cta-btn:hover {
+      transform: translateY(-2px);
+    }
+    .quick-search {
+      background: #FFF;
+      max-width: 90%;
+      margin: -1.5rem auto 1.5rem;
+      padding: 1rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .quick-search select,
+    .quick-search input {
+      padding: 0.6rem;
+      border: 2px solid #ddd;
+      border-radius: 0.4rem;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+    .quick-search input[type="number"] {
+      width: 70px;
+    }
+    .quick-search input[disabled] {
+      background: #f0f0f0;
+    }
+    .quick-search .age-range {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .quick-search button {
+      background: #800000;
+      color: #FFF;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 0.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .quick-search button:hover {
+      background: #FFD700;
+      color: #800000;
+    }
+    .section {
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .section h2 {
+      color: #800000;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    .profile-card {
+      background: #FFF;
+      border-radius: 0.8rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+    .profile-card img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+    .profile-card h3 {
+      font-size: 1rem;
+      color: #800000;
+    }
+    .profile-card p {
+      font-size: 0.8rem;
+      color: #555;
+    }
+    .profile-card a {
+      display: inline-block;
+      margin-top: 0.5rem;
+      background: #FFD700;
+      color: #800000;
+      padding: 0.6rem 1rem;
+      border-radius: 0.4rem;
+      text-decoration: none;
+      font-weight: bold;
+      min-height: 44px;
+      line-height: 1;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #800000;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error, .empty {
+      font-size: 0.9rem;
+      color: #800000;
+      text-align: center;
+      padding: 1rem;
+    }
+    .empty a {
+      color: #FFD700;
+      text-decoration: none;
+    }
+    .empty a:hover {
+      text-decoration: underline;
+    }
+    .why-choose-us {
+      background: #FFE8B6;
+    }
+    .why-choose-us ul {
+      list-style: none;
+      max-width: 90%;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .why-choose-us li {
+      font-size: 0.9rem;
+      margin: 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .why-choose-us li::before {
+      content: '✅';
+      font-size: 1rem;
+    }
+    .success-stories {
+      max-width: 90%;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .story {
+      min-width: 100%;
+      padding: 1rem;
+      text-align: center;
+      animation: slideIn 0.5s ease;
+    }
+    .story img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .story h3 {
+      font-size: 1.1rem;
+      color: #800000;
+    }
+    .story p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+    .slider-nav button {
+      background: #800000;
+      color: #FFF;
+      border: none;
+      padding: 0.6rem;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      min-width: 44px;
+      min-height: 44px;
+    }
+    .slider-nav button:hover {
+      background: #FFD700;
+      color: #800000;
+    }
+    .footer {
+      background: #800000;
+      color: #FFF;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    .footer a {
+      color: #FFD700;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-size: 0.9rem;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .footer p {
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+    }
+    .hidden {
+      display: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .hero h1 {
+        font-size: 1.3rem;
+      }
+      .hero .cta-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .quick-search {
+        margin: -1.5rem 0.5rem 1rem;
+        padding: 0.8rem;
+      }
+      .section h2 {
+        font-size: 1.3rem;
+      }
+      .profile-card img {
+        height: 80px;
+      }
+      .slider-nav button {
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
+    }
+    @media (min-width: 601px) {
+      .nav-drawer {
+        display: none;
+      }
+      .profiles-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .hero {
+        height: 50vh;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <a href="index.html" class="logo">Rangrez Matrimony</a>
+    <span class="hamburger" onclick="toggleDrawer()">☰</span>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="register/details.html" id="nav-register">Register</a>
+      <a href="login.html" id="nav-login">Login</a>
+      <a href="#success-stories">Success Stories</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="register/details.html" class="register-btn">Register Free</a>
+      <a href="dashboard.html" class="hidden" id="nav-dashboard">Dashboard</a>
+      <a href="#" class="hidden" id="nav-logout">Logout</a>
+    </nav>
+    <div class="nav-drawer" id="nav-drawer">
+      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/home.html" onclick="toggleDrawer()">Home</a>
+      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/search.html" onclick="toggleDrawer()">Search</a>
+      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/register.log/registerlog.html" id="drawer-register" onclick="toggleDrawer()">Register</a>
+      <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/login.html" id="drawer-login" onclick="toggleDrawer()">Login</a>
+      <a href="#success-stories" onclick="toggleDrawer()">Success Stories</a>
+      <a href="contact.html" onclick="toggleDrawer()">Contact Us</a>
+      <a href="dashboard.html" class="hidden" id="drawer-dashboard" onclick="toggleDrawer()">Dashboard</a>
+       <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/details.html" class="register-btn" onclick="toggleDrawer()">Register Free</a>
+      <a href="#" class="hidden" id="drawer-logout" onclick="toggleDrawer()">Logout</a>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Find Your Perfect Match within the Rangrez Community</h1>
+    <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/details.html" class="cta-btn">Start Now</a>
+  </section>
+
+  <!-- Quick Search Box -->
+  <section class="quick-search">
+    <select id="search-gender" aria-label="Gender">
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+    <div class="age-range">
+      <input type="number" id="search-age-min" min="18" max="50" value="18" aria-label="Minimum Age">
+      <span>-</span>
+      <input type="number" id="search-age-max" min="18" max="50" value="50" aria-label="Maximum Age">
+    </div>
+    <input type="text" id="search-location" placeholder="City, State" aria-label="Location">
+    <input type="text" value="Rangrez" disabled aria-label="Community">
+    <button onclick="window.location.href='search.html'" aria-label="Search">Search</button>
+  </section>
+
+  <!-- Featured Profiles Section -->
+  <section class="section">
+    <h2>✨ Featured Verified Profiles</h2>
+    <div class="profiles-grid" id="featured-profiles">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="section why-choose-us">
+    <h2>Why Choose Rangrez Matrimony?</h2>
+    <ul>
+      <li>100% Rangrez Verified Profiles</li>
+      <li>Secure & Private Platform</li>
+      <li>Verified Matches Only</li>
+      <li>Real Success Stories</li>
+    </ul>
+  </section>
+
+  <!-- Success Stories Slider -->
+  <section class="section success-stories" id="success-stories">
+    <h2>Our Happy Couples</h2>
+    <div class="slider" id="success-slider">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+    <div class="slider-nav">
+      <button onclick="prevStory()" aria-label="Previous Story">←</button>
+      <button onclick="nextStory()" aria-label="Next Story">→</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="faq.html">Help/FAQ</a>
+    </div>
+    <p>© 2025 Rangrez Matrimony. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCG8OStEG_Si3ypR0fvRqRDSxkO9qz1fCI",
+      authDomain: "rangrezchoice.firebaseapp.com",
+      projectId: "rangrezchoice",
+      storageBucket: "rangrezchoice.firebasestorage.app",
+      messagingSenderId: "586465511498",
+      appId: "1:586465511498:web:cbf91f0fc7b99859fcfeb3",
+      measurementId: "G-F19WWYW4NS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Toggle drawer
+    window.toggleDrawer = function () {
+      const drawer = document.getElementById("nav-drawer");
+      const overlay = document.getElementById("overlay");
+      drawer.classList.toggle("open");
+      overlay.classList.toggle("active");
+    };
+
+    // Update navbar based on auth state
+    onAuthStateChanged(auth, (user) => {
+      const loginLink = document.getElementById("nav-login");
+      const registerLink = document.getElementById("nav-register");
+      const dashboardLink = document.getElementById("nav-dashboard");
+      const logoutLink = document.getElementById("nav-logout");
+      const drawerLogin = document.getElementById("drawer-login");
+      const drawerRegister = document.getElementById("drawer-register");
+      const drawerDashboard = document.getElementById("drawer-dashboard");
+      const drawerLogout = document.getElementById("drawer-logout");
+      if (user) {
+        loginLink.classList.add("hidden");
+        registerLink.classList.add("hidden");
+        dashboardLink.classList.remove("hidden");
+        logoutLink.classList.remove("hidden");
+        drawerLogin.classList.add("hidden");
+        drawerRegister.classList.add("hidden");
+        drawerDashboard.classList.remove("hidden");
+        drawerLogout.classList.remove("hidden");
+      } else {
+        loginLink.classList.remove("hidden");
+        registerLink.classList.remove("hidden");
+        dashboardLink.classList.add("hidden");
+        logoutLink.classList.add("hidden");
+        drawerLogin.classList.remove("hidden");
+        drawerRegister.classList.remove("hidden");
+        drawerDashboard.classList.add("hidden");
+        drawerLogout.classList.add("hidden");
+      }
+    });
+
+    // Logout
+    async function handleLogout(e) {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = "file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/login.html";
+      } catch (error) {
+        console.error("Logout failed:", error.message);
+        alert("Failed to log out. Please try again.");
+      }
+    }
+    document.getElementById("nav-logout").addEventListener("click", handleLogout);
+    document.getElementById("drawer-logout").addEventListener("click", handleLogout);
+
+    // Retry logic for Firestore queries
+    async function withRetry(fn, maxAttempts = 3, delay = 1000) {
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          return await fn();
+        } catch (error) {
+          if (attempt === maxAttempts) throw error;
+          console.warn(`Attempt ${attempt} failed: ${error.message}. Retrying...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+
+    // Fetch featured profiles
+    async function loadFeaturedProfiles() {
+      const profilesGrid = document.getElementById("featured-profiles");
+      profilesGrid.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      try {
+        await withRetry(async () => {
+          const q = query(collection(db, "users"), where("status", "==", "featured"), limit(3));
+          const querySnapshot = await getDocs(q);
+          profilesGrid.innerHTML = "";
+          if (querySnapshot.empty) {
+            profilesGrid.innerHTML = '<p class="empty">New profiles coming soon! <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/details.html">Join now</a> to be featured.</p>';
+            return;
+          }
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const photoUrl = data.photoUrl && data.photoUrl.startsWith("https://i.ibb.co") 
+              ? data.photoUrl 
+              : "https://via.placeholder.com/100?text=Profile";
+            profilesGrid.innerHTML += `
+              <div class="profile-card">
+                <img src="https://via.placeholder.com/100?text=Loading" data-src="${photoUrl}" alt="${data.name}'s Profile" class="lazy">
+                <h3>${data.name}, ${data.age}</h3>
+                <p>${data.location}</p>
+                <p>${data.tagline || "Looking for a life partner"}</p>
+                <a href="file:///C:/Users/sunny/OneDrive/Desktop/matiremony/login/profile.html?id=${doc.id}" aria-label="View ${data.name}'s Profile">View Profile</a>
+              </div>
+            `;
+          });
+          lazyLoadImages();
+        });
+      } catch (error) {
+        console.error("Error loading profiles:", error.message);
+        profilesGrid.innerHTML = '<p class="error">Unable to load profiles. Please try again later.</p>';
+      }
+    }
+
+    // Fetch success stories
+    async function loadSuccessStories() {
+      const slider = document.getElementById("success-slider");
+      slider.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      try {
+        await withRetry(async () => {
+          const q = query(collection(db, "success_stories"), limit(5));
+          const querySnapshot = await getDocs(q);
+          slider.innerHTML = "";
+          if (querySnapshot.empty) {
+            slider.innerHTML = '<p class="empty">Be the first to share your story! <a href="contact.html">Contact us</a>.</p>';
+            return;
+          }
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const imageUrl = data.imageUrl && data.imageUrl.startsWith("https://i.ibb.co") 
+              ? data.imageUrl 
+              : "https://via.placeholder.com/200?text=Couple";
+            slider.innerHTML += `
+              <div class="story">
+                <img src="https://via.placeholder.com/200?text=Loading" data-src="${imageUrl}" alt="${data.coupleNames}'s Story" class="lazy">
+                <h3>${data.coupleNames}</h3>
+                <p>${data.location}</p>
+                <p>"${data.testimonial}"</p>
+              </div>
+            `;
+          });
+          lazyLoadImages();
+          startAutoScroll();
+          addTouchGestures();
+        });
+      } catch (error) {
+        console.error("Error loading success stories:", error.message);
+        slider.innerHTML = '<p class="error">Unable to load stories. Please try again later.</p>';
+      }
+    }
+
+    // Lazy load images
+    function lazyLoadImages() {
+      const images = document.querySelectorAll("img.lazy");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove("lazy");
+            observer.unobserve(img);
+          }
+        });
+      });
+      images.forEach(img => observer.observe(img));
+    }
+
+    // Slider navigation
+    let currentStory = 0;
+    let autoScrollInterval;
+    function updateSlider() {
+      const slider = document.getElementById("success-slider");
+      const stories = slider.children;
+      if (stories.length > 0 && !stories[0].classList.contains("empty")) {
+        slider.style.transform = `translateX(-${currentStory * 100}%)`;
+      }
+    }
+    window.nextStory = function () {
+      const stories = document.getElementById("success-slider").children;
+      if (stories.length > 0 && !stories[0].classList.contains("empty")) {
+        currentStory = (currentStory < stories.length - 1) ? currentStory + 1 : 0;
+        updateSlider();
+      }
+    };
+    window.prevStory = function () {
+      const stories = document.getElementById("success-slider").children;
+      if (stories.length > 0 && !stories[0].classList.contains("empty")) {
+        currentStory = (currentStory > 0) ? currentStory - 1 : stories.length - 1;
+        updateSlider();
+      }
+    };
+
+    // Auto-scroll slider
+    function startAutoScroll() {
+      const slider = document.getElementById("success-slider");
+      if (slider.children.length > 1 && !slider.children[0].classList.contains("empty")) {
+        autoScrollInterval = setInterval(() => {
+          nextStory();
+        }, 5000);
+        slider.addEventListener("mouseenter", () => clearInterval(autoScrollInterval));
+        slider.addEventListener("mouseleave", startAutoScroll);
+      }
+    }
+
+    // Touch gestures for slider
+    function addTouchGestures() {
+      const slider = document.getElementById("success-slider");
+      let touchStartX = 0;
+      let touchEndX = 0;
+      slider.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      slider.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 50) {
+          nextStory();
+        } else if (touchEndX - touchStartX > 50) {
+          prevStory();
+        }
+      });
+    }
+
+    // Initialize
+    loadFeaturedProfiles();
+    loadSuccessStories();
+  </script>
+</body>
+</html>

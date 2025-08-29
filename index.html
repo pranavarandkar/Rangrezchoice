@@ -110,7 +110,7 @@
       display: block;
     }
     .hero {
-      background: url('https://images.unsplash.com/photo-1519748771451-a94c186835b7?fit=crop&w=800&q=80') no-repeat center/cover;
+      background: url('') no-repeat center/cover;
       height: 40vh;
       display: flex;
       flex-direction: column;
@@ -193,7 +193,7 @@
     }
     .profiles-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1rem;
       max-width: 90%;
       margin: 0 auto;
@@ -205,17 +205,25 @@
       padding: 1rem;
       text-align: center;
       animation: fadeIn 0.5s ease;
+      cursor: pointer;
     }
     .profile-card img {
-      width: 100%;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       object-fit: cover;
-      border-radius: 0.4rem;
-      margin-bottom: 0.8rem;
+      border-radius: 50%;
+      border: 2px solid #800000;
+      margin: 0 auto 0.8rem;
+      display: block;
+      transition: transform 0.2s;
+    }
+    .profile-card img:hover {
+      transform: scale(1.1);
     }
     .profile-card h3 {
       font-size: 1rem;
       color: #800000;
+      cursor: pointer;
     }
     .profile-card p {
       font-size: 0.8rem;
@@ -233,6 +241,26 @@
       min-height: 44px;
       line-height: 1;
     }
+    .profile-card a:hover {
+      background: #800000;
+      color: #FFF;
+    }
+    .show-more {
+      display: block;
+      margin: 1rem auto;
+      background: #800000;
+      color: #FFF;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 0.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .show-more:hover {
+      background: #FFD700;
+      color: #800000;
+    }
     .loading {
       display: flex;
       justify-content: center;
@@ -249,7 +277,7 @@
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      to { transform: rotate(360deg); }
     }
     .error, .empty {
       font-size: 0.9rem;
@@ -390,7 +418,8 @@
         font-size: 1.3rem;
       }
       .profile-card img {
-        height: 80px;
+        width: 60px;
+        height: 60px;
       }
       .slider-nav button {
         padding: 0.5rem;
@@ -402,7 +431,7 @@
         display: none;
       }
       .profiles-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       }
       .hero {
         height: 50vh;
@@ -416,28 +445,28 @@
 <body>
   <!-- Header / Navbar -->
   <header class="navbar">
-    <a href="https://pranavarandkar.github.io/Rangrezchoice/index.html" class="logo">Rangrez Matrimony</a>
+    <a href="./index.html" class="logo">Rangrez Matrimony</a>
     <span class="hamburger" onclick="toggleDrawer()">☰</span>
     <nav class="nav-links">
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/index.html">Home</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/search.html">Search</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/registerlog.html" id="nav-register">Register</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/login.html" id="nav-login">Login</a>
+      <a href="./index.html">Home</a>
+      <a href="./search.html">Search</a>
+      <a href="./registerlog.html" id="nav-register">Register</a>
+      <a href="./login.html" id="nav-login">Login</a>
       <a href="#success-stories">Success Stories</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html" class="register-btn">Register Free</a>
-      <a href="dashboard.html" class="hidden" id="nav-dashboard">Dashboard</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/login.html" class="hidden" id="nav-logout">Logout</a>
+      <a href="./contact.html">Contact Us</a>
+      <a href="./details.html" class="register-btn">Register Free</a>
+      <a href="./dashboard.html" class="hidden" id="nav-dashboard">Dashboard</a>
+      <a href="#" class="hidden" id="nav-logout">Logout</a>
     </nav>
     <div class="nav-drawer" id="nav-drawer">
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/index.html" onclick="toggleDrawer()">Home</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/search.html" onclick="toggleDrawer()">Search</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/registerlog.html" id="drawer-register" onclick="toggleDrawer()">Register</a>
-      <a href="https://pranavarandkar.github.io/Rangrezchoice/login.html" id="drawer-login" onclick="toggleDrawer()">Login</a>
+      <a href="./index.html" onclick="toggleDrawer()">Home</a>
+      <a href="./search.html" onclick="toggleDrawer()">Search</a>
+      <a href="./registerlog.html" id="drawer-register" onclick="toggleDrawer()">Register</a>
+      <a href="./login.html" id="drawer-login" onclick="toggleDrawer()">Login</a>
       <a href="#success-stories" onclick="toggleDrawer()">Success Stories</a>
-      <a href="contact.html" onclick="toggleDrawer()">Contact Us</a>
-      <a href="dashboard.html" class="hidden" id="drawer-dashboard" onclick="toggleDrawer()">Dashboard</a>
-       <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html" class="register-btn" onclick="toggleDrawer()">Register Free</a>
+      <a href="./contact.html" onclick="toggleDrawer()">Contact Us</a>
+      <a href="./details.html" class="register-btn" onclick="toggleDrawer()">Register Free</a>
+      <a href="./dashboard.html" class="hidden" id="drawer-dashboard" onclick="toggleDrawer()">Dashboard</a>
       <a href="#" class="hidden" id="drawer-logout" onclick="toggleDrawer()">Logout</a>
     </div>
     <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
@@ -446,7 +475,7 @@
   <!-- Hero Section -->
   <section class="hero">
     <h1>Find Your Perfect Match within the Rangrez Community</h1>
-    <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html" class="cta-btn">Start Now</a>
+    <a href="./details.html" class="cta-btn">Start Now</a>
   </section>
 
   <!-- Quick Search Box -->
@@ -463,7 +492,7 @@
     </div>
     <input type="text" id="search-location" placeholder="City, State" aria-label="Location">
     <input type="text" value="Rangrez" disabled aria-label="Community">
-    <button onclick="window.location.href='https://pranavarandkar.github.io/Rangrezchoice/search.html'" aria-label="Search">Search</button>
+    <button onclick="window.location.href='./search.html'" aria-label="Search">Search</button>
   </section>
 
   <!-- Featured Profiles Section -->
@@ -472,6 +501,7 @@
     <div class="profiles-grid" id="featured-profiles">
       <div class="loading"><div class="spinner"></div></div>
     </div>
+    <button class="show-more hidden" id="show-more" onclick="loadMoreProfiles()">Show More</button>
   </section>
 
   <!-- Why Choose Us Section -->
@@ -500,11 +530,11 @@
   <!-- Footer -->
   <footer class="footer">
     <div>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms & Conditions</a>
-      <a href="faq.html">Help/FAQ</a>
+      <a href="./about.html">About</a>
+      <a href="./contact.html">Contact</a>
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms & Conditions</a>
+      <a href="./faq.html">Help/FAQ</a>
     </div>
     <p>© 2025 Rangrez Matrimony. All Rights Reserved.</p>
   </footer>
@@ -512,7 +542,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    import { getFirestore, collection, query, getDocs, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -574,7 +604,7 @@
       e.preventDefault();
       try {
         await signOut(auth);
-        window.location.href = "https://pranavarandkar.github.io/Rangrezchoice/login.html";
+        window.location.href = "./login.html";
       } catch (error) {
         console.error("Logout failed:", error.message);
         alert("Failed to log out. Please try again.");
@@ -596,40 +626,96 @@
       }
     }
 
+    // Calculate age from DOB
+    function calculateAge(dob) {
+      if (!dob) return null;
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
     // Fetch featured profiles
-    async function loadFeaturedProfiles() {
+    let lastDoc = null;
+    async function loadFeaturedProfiles(append = false) {
       const profilesGrid = document.getElementById("featured-profiles");
-      profilesGrid.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      const showMoreButton = document.getElementById("show-more");
+      if (!append) {
+        profilesGrid.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      }
       try {
         await withRetry(async () => {
-          const q = query(collection(db, "users"), where("status", "==", "featured"), limit(3));
+          const q = lastDoc 
+            ? query(collection(db, "users"), startAfter(lastDoc), limit(3))
+            : query(collection(db, "users"), limit(6));
           const querySnapshot = await getDocs(q);
-          profilesGrid.innerHTML = "";
+          if (!append) {
+            profilesGrid.innerHTML = "";
+          }
           if (querySnapshot.empty) {
-            profilesGrid.innerHTML = '<p class="empty">New profiles coming soon! <a href="https://pranavarandkar.github.io/Rangrezchoice/details.html">Join now</a> to be featured.</p>';
+            if (!append) {
+              profilesGrid.innerHTML = '<p class="empty">New profiles coming soon! <a href="./details.html">Join now</a> to be featured.</p>';
+            }
+            showMoreButton.classList.add("hidden");
             return;
           }
           querySnapshot.forEach((doc) => {
             const data = doc.data();
             const photoUrl = data.photoUrl && data.photoUrl.startsWith("https://i.ibb.co") 
               ? data.photoUrl 
-              : "https://via.placeholder.com/100?text=Profile";
+              : "https://via.placeholder.com/80?text=Profile";
+            const age = data.dob ? calculateAge(data.dob) : data.age || "Not specified";
             profilesGrid.innerHTML += `
-              <div class="profile-card">
-                <img src="https://via.placeholder.com/100?text=Loading" data-src="${photoUrl}" alt="${data.name}'s Profile" class="lazy">
-                <h3>${data.name}, ${data.age}</h3>
-                <p>${data.location}</p>
-                <p>${data.tagline || "Looking for a life partner"}</p>
-                <a href="https://pranavarandkar.github.io/Rangrezchoice/profile.html?id=${doc.id}" aria-label="View ${data.name}'s Profile">View Profile</a>
+              <div class="profile-card" data-id="${doc.id}">
+                <img src="https://via.placeholder.com/80?text=Loading" data-src="${photoUrl}" alt="${data.name}'s Profile" class="lazy">
+                <h3 class="profile-name">${data.name || "Not specified"}, ${age}</h3>
+                <p>${data.location || "Not specified"}</p>
+                <p>${data.occupation || "Not specified"}</p>
+                <a href="./profile.html?id=${doc.id}" aria-label="View ${data.name}'s Profile">View Profile</a>
               </div>
             `;
           });
+          lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+          showMoreButton.classList.remove("hidden");
           lazyLoadImages();
+          addProfileClickHandlers();
         });
       } catch (error) {
         console.error("Error loading profiles:", error.message);
-        profilesGrid.innerHTML = '<p class="error">Unable to load profiles. Please try again later.</p>';
+        if (!append) {
+          profilesGrid.innerHTML = '<p class="error">Unable to load profiles. Please try again later.</p>';
+        }
+        showMoreButton.classList.add("hidden");
       }
+    }
+
+    // Load more profiles
+    window.loadMoreProfiles = function () {
+      loadFeaturedProfiles(true);
+    };
+
+    // Add click handlers for profile cards, names, and images
+    function addProfileClickHandlers() {
+      document.querySelectorAll(".profile-card").forEach(card => {
+        const userId = card.getAttribute("data-id");
+        card.addEventListener("click", (e) => {
+          if (e.target.tagName !== "A") { // Avoid redirecting if "View Profile" button is clicked
+            window.location.href = `./profile.html?id=${userId}`;
+          }
+        });
+        const name = card.querySelector(".profile-name");
+        const image = card.querySelector("img");
+        [name, image].forEach(element => {
+          element.addEventListener("click", (e) => {
+            e.stopPropagation();
+            window.location.href = `./profile.html?id=${userId}`;
+          });
+        });
+      });
     }
 
     // Fetch success stories
@@ -642,7 +728,7 @@
           const querySnapshot = await getDocs(q);
           slider.innerHTML = "";
           if (querySnapshot.empty) {
-            slider.innerHTML = '<p class="empty">Be the first to share your story! <a href="contact.html">Contact us</a>.</p>';
+            slider.innerHTML = '<p class="empty">Be the first to share your story! <a href="./contact.html">Contact us</a>.</p>';
             return;
           }
           querySnapshot.forEach((doc) => {
@@ -653,9 +739,9 @@
             slider.innerHTML += `
               <div class="story">
                 <img src="https://via.placeholder.com/200?text=Loading" data-src="${imageUrl}" alt="${data.coupleNames}'s Story" class="lazy">
-                <h3>${data.coupleNames}</h3>
-                <p>${data.location}</p>
-                <p>"${data.testimonial}"</p>
+                <h3>${data.coupleNames || "Not specified"}</h3>
+                <p>${data.location || "Not specified"}</p>
+                <p>"${data.testimonial || "No testimonial provided"}"</p>
               </div>
             `;
           });
@@ -746,4 +832,3 @@
   </script>
 </body>
 </html>
-
